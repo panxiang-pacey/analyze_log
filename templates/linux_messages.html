@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     <meta charset=utf-8" />
+    <title>Linux的messages日志</title>
+	<!-- <link rel="stylesheet" type="text/css" href="/static/easyui.css">
+	<link rel="stylesheet" type="text/css" href="static/icon.css">
+	
+	<script type="text/javascript" src="/static/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/static/datagrid-filter.js"></script>  
+	<style>
+		.icon-filter{
+			background:url('filter.png') no-repeat center center;
+		}
+	</style>
+    -->
+</head>
+
+<body>
+{% extends "layout.html" %}
+
+{% block content %}
+
+
+
+<script>
+
+    $(function(){
+			var dg = $('#dg').datagrid({
+				filterBtnIconCls:'icon-filter'
+			});
+			
+			dg.datagrid({
+			          singleSelect:true,
+					  //fitColumns:true,
+					  resizeHandle:'right',
+					  autoRowHeight:true,
+					  pagination:true,
+					  pageSize:50,
+					  pageList:[10,20,30,40,50],
+					  rownumbers:true
+
+			});
+			
+			dg.datagrid('enableFilter');
+			
+			dg.datagrid('getPager').pagination({//分页栏下方文字显示
+                      displayMsg:'当前显示第{from}条到{to}条 共{total}条记录',
+                      onBeforeRefresh:function(pageNumber, pageSize){
+                      $(this).pagination('loading');
+                       alert('pageNumber:'+pageNumber+',pageSize:'+pageSize);
+                       $(this).pagination('loaded');
+                    }
+                     });
+					 
+					 
+			//网格双击弹窗
+			dg.datagrid({
+				onDblClickRow: function(rowIndex, rowData){
+					//alert(rowData.http_user_agent)
+                     $.messager.alert('详细信息',
+					                 "日志内容："+rowData.event,
+									 'info'); 
+
+
+				}
+			}); 			 
+					 
+		     //设置时间
+  　　　　 var curr_time = new Date();  
+           $("#dd").datebox("setValue",fun_formatter(curr_time));  
+					 
+		});
+		
+
+		
+		
+</script>
+	
+	
+<script>
+
+		function onChangeDate(date){
+			//alert(date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate());
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate(); 
+			var ts = y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+			//alert(ts)
+			
+			$('#dg').datagrid('load',{
+				timestamp: ts
+			});
+
+		}
+		
+		
+		function fun_error(){ 
+		          //请求失败时调用
+		          alert('Error loading'); 
+		}
+		
+		function fun_success(data){
+		          //请求成功时调用
+		          //alert("success")
+				   if (data.total == 0) {
+                      alert("暂无数据");
+                   }
+		
+		}
+		
+</script>
+
+
+<script type="text/javascript">
+		function fun_formatter(date){
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate();
+			return  y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d); 
+		}
+		function fun_parser(s){
+			if (!s) return new Date();
+			var ss = (s.split('-'));
+			var y = parseInt(ss[0],10);
+			var m = parseInt(ss[1],10);
+			var d = parseInt(ss[2],10);
+			if (!isNaN(y) && !isNaN(m) && !isNaN(d)){return new Date(y,m-1,d);} else{return new Date();}
+		}
+</script>
+
+
+
+
+
+
+<h2 align="center">Linux的messages日志</h2>
+
+日志日期：<input id="dd" type="text" class="easyui-datebox" data-options="formatter:fun_formatter,parser:fun_parser,onSelect:onChangeDate" required="required">
+
+
+<br><br>
+
+<table id="dg" 
+               data-options="url:'/linux_messages',method:'post',onLoadSuccess:fun_success,onLoadError:fun_error,fitColumns:true,singleSelect:true">
+    <thead>
+        <tr >
+	      <th data-options="field:'log_id',width:80,sortable:true,halign: 'center' ">日志ID</th>
+		  <th data-options="field:'iso_8601',width:200,sortable:true,halign: 'center' ">iso_8601</th>
+		  <th data-options="field:'ctime',width:200,sortable:true,halign: 'center' ">时间</th>
+		  <th data-options="field:'host',width:200,sortable:true,halign: 'center' ">主机</th>
+		  <th data-options="field:'process_id',width:200,sortable:true,halign: 'center' ">进程（PID)</th> 
+		  <th data-options="field:'event',width:1000,sortable:true,halign: 'center' ">事件</th>
+		  
+        </tr>
+    </thead>
+  
+
+</table>
+
+{% endblock %}
+
+
+</body>
+
+</html>

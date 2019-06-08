@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8" />
+    <title>uwsgi日志</title>
+	<!-- <link rel="stylesheet" type="text/css" href="/static/easyui.css">
+	<link rel="stylesheet" type="text/css" href="static/icon.css">
+	
+	<script type="text/javascript" src="/static/jquery.min.js"></script>
+	<script type="text/javascript" src="/static/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="/static/datagrid-filter.js"></script> 
+	<style>
+		.icon-filter{
+			background:url('filter.png') no-repeat center center;
+		}
+	</style>
+    -->
+</head>
+
+<body>
+
+{% extends "layout.html" %}
+
+{% block content %}
+
+<script>
+
+    $(function(){
+			var dg = $('#dg').datagrid({
+				filterBtnIconCls:'icon-filter'
+			});
+			
+			dg.datagrid({
+			          singleSelect:true,
+					  //fitColumns:true,
+					  resizeHandle:'right',
+					  autoRowHeight:true,
+					  pagination:true,
+					  pageSize:50,
+					  pageList:[10,20,30,40,50],
+					  rownumbers:true
+
+			});
+			
+			dg.datagrid('enableFilter');
+			
+			dg.datagrid('getPager').pagination({//分页栏下方文字显示
+                      displayMsg:'当前显示第{from}条到{to}条 共{total}条记录',
+                      onBeforeRefresh:function(pageNumber, pageSize){
+                      $(this).pagination('loading');
+                       alert('pageNumber:'+pageNumber+',pageSize:'+pageSize);
+                       $(this).pagination('loaded');
+                    }
+                     });
+					 
+		    //网格双击弹窗
+			dg.datagrid({
+				onDblClickRow: function(rowIndex, rowData){
+					//alert(rowData.http_user_agent)
+                    $.messager.alert('详细信息',
+					                 "请求地址："+rowData.request_uri+"\n"+"用户终端："+rowData.http_user_agent,
+									 'info');
+				}
+			}); 			 
+					 
+		     //设置时间
+  　　　　 var curr_time = new Date();  
+           $("#dd").datebox("setValue",fun_formatter(curr_time));  
+					 
+		});
+		
+
+		
+
+		
+		
+</script>
+	
+	
+<script>
+
+		function onChangeDate(date){
+			//alert(date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate());
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate(); 
+			var ts = y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+			//alert(ts)
+			
+			$('#dg').datagrid('load',{
+				timestamp: ts
+			});
+
+		}
+		
+		
+		function fun_error(){ 
+		          //请求失败时调用
+		          alert('Error loading'); 
+		}
+		
+		function fun_success(data){
+		          //请求成功时调用
+		          //alert("success")
+				   if (data.total == 0) {
+                      alert("暂无数据");
+                   }
+		
+		}
+		
+</script>
+
+
+<script type="text/javascript">
+		function fun_formatter(date){
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate();
+			return  y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d); 
+		}
+		function fun_parser(s){
+			if (!s) return new Date();
+			var ss = (s.split('-'));
+			var y = parseInt(ss[0],10);
+			var m = parseInt(ss[1],10);
+			var d = parseInt(ss[2],10);
+			if (!isNaN(y) && !isNaN(m) && !isNaN(d)){return new Date(y,m-1,d);} else{return new Date();}
+		}
+</script>
+
+
+
+
+
+
+<h2 align="center">uwsgi日志</h2>
+
+日志日期：<input id="dd" type="text" class="easyui-datebox" data-options="formatter:fun_formatter,parser:fun_parser,onSelect:onChangeDate" required="required">
+
+<br><br>
+
+<table id="dg" 
+               data-options="url:'/uwsgi',method:'post',onLoadSuccess:fun_success,onLoadError:fun_error,fitColumns:true,singleSelect:true">
+    <thead>
+        <tr >
+	      <th data-options="field:'log_id',width:80,sortable:true,halign: 'center' ">日志ID</th>
+		  <th data-options="field:'unix_timestamp',width:120,sortable:true,halign: 'center' ">Unix时间戳</th>
+		  <th data-options="field:'remote_addr',width:120,sortable:true,halign: 'center' ">客户端地址</th>
+		  <th data-options="field:'remote_user',width:130,sortable:true,halign: 'center' ">客户端用户名称</th> 
+		  <th data-options="field:'request_time',width:220,sortable:true,halign: 'center' ">请求时间</th>
+		  <th data-options="field:'request_method',width:100,sortable:true,halign: 'center' ">请求方法</th>
+		  <th data-options="field:'request_uri',width:200,sortable:true,halign: 'center' ">请求地址</th>
+		  <th data-options="field:'server_protocol',width:80,sortable:true,halign: 'center' ">协议</th>
+		  <th data-options="field:'status',width:180,sortable:true,halign: 'center' ">HTTP响应状态码</th>
+		  <th data-options="field:'size',width:100,sortable:true,halign: 'center' ">响应大小</th>
+		  <th data-options="field:'http_referer',width:180,sortable:true,halign: 'center' ">URL跳转来源</th> 
+		  <th data-options="field:'http_user_agent',width:200,sortable:true,halign: 'center' ">用户终端</th>
+		  
+        </tr>
+    </thead>
+	
+
+
+  
+
+</table>
+
+{% endblock %}
+
+
+</body>
+
+</html>

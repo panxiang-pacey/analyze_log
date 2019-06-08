@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+ 
+  <title>日志收集分析系统</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <script src="static/jquery.min.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/easyui.css">
+  <link rel="stylesheet" type="text/css" href="static/icon.css">
+	
+  <script type="text/javascript" src="/static/jquery.easyui.min.js"></script>
+  <script type="text/javascript" src="/static/datagrid-filter.js"></script>
+  
+  	<style>
+		.icon-filter{
+			background:url('filter.png') no-repeat center center;
+		}
+	</style>
+
+</head>
+<body>
+
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/home">日志收集分析系统</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/home">首页 <span class="sr-only">(current)</span></a>
+      </li>
+	  
+      <li class="nav-item">
+        <a class="nav-link" href="/mysql">MySQL错误日志</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="/nginx_access">nginx的access日志</a>
+      </li>
+	  
+	  <li class="nav-item">
+        <a class="nav-link" href="/uwsgi">uwsgi日志</a>
+      </li>
+	  
+	  <li class="nav-item">
+        <a class="nav-link" href="/linux_messages">Linux的messages日志</a>
+      </li>
+	  
+	  <li class="nav-item">
+        <a class="nav-link" href="/linux_secure">Linux的secure日志</a>
+      </li>
+	  
+	  </ul>
+	  
+	  
+	  
+	  <ul class="navbar-nav">
+	  <li class="nav-item">
+        <a class="nav-link" href="/logout">安全退出</a>
+      </li>
+	  </ul>
+	  
+	  
+	  
+    
+   
+  </div>
+</nav>
+
+
+
+    {% block content %}{% endblock %}
+
+
+
+</body>
+</html>

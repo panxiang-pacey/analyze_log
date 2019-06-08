@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     <meta charset=utf-8" />
+    <title>Linux的secure日志</title>
+	 <link rel="stylesheet" type="text/css" href="easyui.css">
+	<link rel="stylesheet" type="text/css" href="static/icon.css">
+	
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="datagrid-filter.js"></script>  
+	<style>
+		.icon-filter{
+			background:url('filter.png') no-repeat center center;
+		}
+	</style>
+   
+</head>
+
+<body>
+
+
+
+
+<script>
+
+    $(function(){
+			 
+					 
+		     //设置时间
+  　　　　 var curr_time = new Date();  
+           $("#dd").datetimebox("setValue",fun_formatter(curr_time));  
+		   
+					 
+		});
+		
+
+		
+		
+</script>
+	
+	
+<script>
+
+		function onChangeDate(date){
+			//alert(date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate());
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate(); 
+			var h = date.getHours();
+			var min = date.getMinutes()
+			var ts = y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+' '+(h<10?('0'+h):h)+':'+(min<10?('0'+min):min);
+			alert(ts)
+			
+		}
+		
+		
+
+		
+</script>
+
+
+<script type="text/javascript">
+		function fun_formatter(date){
+			var y = date.getFullYear();
+			var m = date.getMonth()+1;
+			var d = date.getDate();
+			var h = date.getHours();
+			var min = date.getMinutes();
+			return  y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d)+' '+(h<10?('0'+h):h)+':'+(min<10?('0'+min):min); 
+			                                  
+		}
+		function fun_parser(s){
+			if (!s) return new Date();
+			var dt = (s.split(' '));
+			var d = dt[0]
+			var t = dt[1]
+			
+			var dd = (d.split('-'));
+			var y = parseInt(dd[0],10);
+			var m = parseInt(dd[1],10);
+			var d = parseInt(dd[2],10);
+			
+			var tt = (t.split(':'));
+			var h = parseInt(tt[0],10);
+			var min = parseInt(tt[1],10);
+			
+			if (!isNaN(y) && !isNaN(m) && !isNaN(d)&& !isNaN(h) && !isNaN(min))
+			{
+			  return new Date(y,m-1,d,h,min);
+			} 
+			else
+			{
+			  return new Date();
+			}	
+		}
+</script>
+
+
+
+
+
+
+<h2 align="center">Linux的secure日志</h2>
+
+日志日期：<input id="dd" type="text" class="easyui-datetimebox" data-options="formatter:fun_formatter,parser:fun_parser,onSelect:onChangeDate,showSeconds:false" >
+<input type="datetime-local" value="2015-09-24T13:59:59"/>
+
+
+<br><br>
+
+
+
+
+</body>
+
+</html>
